@@ -1,8 +1,11 @@
 # Originator AutoQC, Etc. 
 **Current version: 0.0.1**
+
+![Adds features to More Actions](https://lh3.googleusercontent.com/GNwhXfqNOuDq9n8CKescghQqeBmb1yGwRaOA_t4VjOxkO1NiyYN8pQAwuGmk-hdERiAlpOBRww8DgsxhDQAEPZtgkQ=w640-h400-e365-rj-sc0x00ffffff)
+
 This is the extension package for Chrome webstore. You can load it as an unpacked package in Developer mode (for example, if you want to customize the code), but for most users it's better to install the extension from its official [Chrome Web Store](https://chrome.google.com/webstore/detail/originator-autoqc-etc/fmdlmdfceiaaljfpdkbpfhoppcklkopo "Originator AutoQC for Netflix") page.
 
-For support, bug reports or feedback please contact me at katzurki@gmail.com 
+For support, bug reports or feedback please contact me at katzurki@gmail.com
 
 These are the issues/ideas I'm currently working on. Thanks everybody who provided their feedback and shared ideas. Let me know if I forgot anything.
 
