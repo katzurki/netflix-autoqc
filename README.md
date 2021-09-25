@@ -1,4 +1,4 @@
-# Originator AutoQC, Etc. (Chrome extension for Netflix Originator Backlot)
+# Originator AutoQC, Etc. (Chrome extension for Netflix Originator)
 **Current version: 0.0.1**
 
 ![Adds features to More Actions](https://lh3.googleusercontent.com/GNwhXfqNOuDq9n8CKescghQqeBmb1yGwRaOA_t4VjOxkO1NiyYN8pQAwuGmk-hdERiAlpOBRww8DgsxhDQAEPZtgkQ=w640-h400-e365-rj-sc0x00ffffff)
