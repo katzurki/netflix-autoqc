@@ -19,3 +19,4 @@ TODO (important):
 * document everything and record tutorials (preliminary attempt here: https://www.youtube.com/watch?v=qTKuCNZfUII)
 * add TTML support to export/import subtitles to properly store attributes like FN tags or annotations
 * run Vendor's Pre-Submission Checklist automatically, instead of copying/pasting each regex (what flavor regexes are they anyway?)
+* turns out many 3rd-party SRTs can come with 3 or even 4 lines, which breaks Import SRT--fix ASAP
