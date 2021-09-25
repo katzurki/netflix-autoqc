@@ -2,6 +2,8 @@ This is the extension package for Chrome webstore. You can load it as an unpacke
 
 For support, bug reports or feedback please contact me at katzurki@gmail.com 
 
+These are the issues/ideas I'm currently working on. Thanks everybody who provided their feedback and shared ideas. Let me know if I forgot anything.
+
 TODO in no particular order:
 * migrate to manifest v3
 * include diff.js, Save Shortcuts, ImportBetterSRT in the extension
