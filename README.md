@@ -12,7 +12,7 @@ For support, bug reports, feedback or collaborative work please contact me at ka
 TODO (priority):
 * AutoFix that implements confident AutoQC findings
 * AutoQC Timings-Only mode, most useful if you need to snap/extend a bad SRT or CC source to shot changes
-* document everything and record tutorials (Thanks David for giving it a shot! https://www.youtube.com/watch?v=qTKuCNZfUII)
+* write proper documentation and tutorials
 * TTML support to export/import subtitles to properly store attributes like FN tags or annotations.
 * run Vendor's Pre-Submission Checklist automatically, instead of copying/pasting each regex (what flavor regexes are they anyway?)
 * turns out many 3rd-party SRTs can come with 3 or even 4 lines, which breaks Import SRT--fix ASAP
