@@ -16,6 +16,7 @@ TODO (priority):
 * proper TTML support (VTT?) in export/import subtitles to properly store attributes like FN tags or annotations. Right now annotations are ditched on SRT export and hence lost on import, and FN tags are a sequence of "<b></b>" at the end of an SRT line
 * run Vendor-Mandated Pre-Submission Checklist automatically, instead of copying/pasting each regex (what flavor regexes are they anyway?)
 * turns out many 3rd-party SRTs can come with 3 or even 4 lines, which breaks Import SRT--fix ASAP
+* find out why removing the waveform canvas in Hide/Move mode breaks the Originator
 
 TODO (someday):
 * migrate to manifest v3
