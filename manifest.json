@@ -1,0 +1,23 @@
+{
+ "background": {"scripts": ["background.js"]},
+ "browser_action": {
+ "default_icon": "icon-128.png",
+ "default_title": "AutoQC and other features for Netflix's Originator"
+ },
+ "name": "Originator AutoQC (Etc.)",
+ "description": "Click the icon in a started Originator task to add AutoQC and other useful features to the More Actions menu.",
+ "homepage_url": "https://katzurki.github.io/nettufurikusu",
+ "icons": {
+     "16": "icon-16.png",
+     "19": "icon-19.png",
+     "38": "icon-38.png",
+     "48": "icon-48.png",
+     "128": "icon-128.png",
+     "256": "icon-256.png" },
+ "permissions": [
+     "https://localization-lucid.netflix.com/*",
+     "https://originator.backlot.netflix.com/*"
+ ],
+ "version": "0.0.1",
+ "manifest_version": 2
+}
