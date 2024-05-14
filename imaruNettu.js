@@ -1,9 +1,10 @@
-var IMARUVERSION = "July 8, 2021"
+var IMARUVERSION = "August 21, 2023"
 
 if (window.location.hostname == "localization-lucid.netflix.com") {
     imarunettuKNP2CSV()
     //When KNP doesn't export from Originator page, the user is redirected here. The KNP2CSV function must handle both locations without interfering with the main code
-} else if (window.location.hostname == "originator.backlot.netflix.com") {
+} else if (window.location.hostname == "timedtext.netflixstudios.com") {
+    document.querySelector("#timedtext > div.origination-editor > div.Hawkins-Box > h5").classList.add("cpe-page-menu-label")
     var menu = document.querySelector("div.popup")
     var itemButtons = document.getElementsByClassName("item-button")
     var dropdown = itemButtons[itemButtons.length -
@@ -12,10 +13,10 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
     //Object.entries()[Object.keys().length-1] is the last button/
     var imarunettuButtons = {
         "imarunettuBilingualExportHTML": "Export Bilingual File",
-        "imarunettuExportMP4": "Export Video as MP4",
+        //"imarunettuExportMP4": "Export Video as MP4",
         "imarunettuDoubleExportSRT": "Export Subtitles as SRT",
         "imarunettuKNP2CSV": "Export KNP as CSV",
-        "imarunettuExportSettings" : "Save Current Shortcuts",
+        //"imarunettuExportSettings" : "Save Current Shortcuts",
         "imarunettuImportBetterSrt": "Import SRT as Subtitles",
         "imarunettuRemoveClutter": "Hide or Move Elements",
         "imarunettuRunAutoQC": "Run AutoQC"
@@ -48,7 +49,7 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
     }
 
     function deferAddButtonUntil(condition,
-        argument) { //fortunately I hope never to need this anymore ever again
+        argument) { //fortunately I hope never to need this ever again
         if (eval(condition)) {
             console.log("Condition: " + condition + " evalued TRUE after " + firedon +
                 "ms");
@@ -72,21 +73,24 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
                 element.click();
                 document.body.removeChild(element);
             }
-            videolink = document.getElementsByClassName("video-holder")[0]
-                .children[0].getAttribute("src")
+            videolink = document.getElementsByClassName("media-player-content-view")[0]
+                .children[0].children[0].getAttribute("src")
             download(videolink)
         })()
     }
 
-    function imarunettuExportSettings(){
-        (function(){
-        var currentSettings = localStorage.getItem("originator.shortcuts.bindings");
-        if(typeof currentSettings !== "undefined"){
-            var userName = document.getElementsByClassName("username")[0].textContent.replace(/@.+/gi,":")
-            var url = 'https://katzurki.github.io/nettufurikusu/Shortcuts-As-Bookmarklet.html#' + userName + btoa(currentSettings);
-            window.open(url) } else {alert("CurrentSettings problem." + typeof currentSettings)}
-    })()
-}
+    function imarunettuExportSettings() {
+        (function() {
+            var currentSettings = localStorage.getItem("originator.shortcuts.bindings");
+            if (typeof currentSettings !== "undefined") {
+                var userName = document.querySelector("#media-player-content-view > div.watermark > svg > text:nth-child(2)").textContent.replace(/@.+/gi, ":")
+                var url = 'https://katzurki.github.io/nettufurikusu/Shortcuts-As-Bookmarklet.html#' + userName + btoa(currentSettings);
+                window.open(url)
+            } else {
+                alert("CurrentSettings problem." + typeof currentSettings)
+            }
+        })()
+    }
 
     function imarunettuRemoveClutter() {
         var wm = document.getElementsByClassName("Watermark");
@@ -144,6 +148,164 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
             };
         })()
     }
+    
+function createLoadingSvg() {
+var moreActionsButton = document.querySelector("#timedtext > div.origination-editor > div.Toolbar > div:nth-child(15) > div.item-button");
+
+const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+svg.setAttribute("width", "25px");
+svg.setAttribute("id","imaruSvg");
+svg.setAttribute("height", "25px");
+svg.setAttribute("viewBox", "0 0 100 100");
+svg.setAttribute("preserveAspectRatio", "xMidYMid");
+svg.style.background = "none";
+svg.style.position = "relative";
+svg.style.top = "0px";
+svg.style.left = "33px";
+
+
+// Create the first circle element
+const circle1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+circle1.setAttribute("cx", "50");
+circle1.setAttribute("cy", "50");
+circle1.setAttribute("fill", "none");
+circle1.setAttribute("r", "30");
+circle1.setAttribute("stroke", "#2296f3");
+circle1.setAttribute("stroke-width", "4");
+
+// Create the second circle element
+const circle2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+circle2.setAttribute("cx", "50");
+circle2.setAttribute("cy", "50");
+circle2.setAttribute("fill", "none");
+circle2.setAttribute("r", "30");
+circle2.setAttribute("stroke", "#42A5F5");
+circle2.setAttribute("stroke-width", "4");
+circle2.setAttribute("stroke-linecap", "square");
+circle2.setAttribute("transform", "rotate(167.066 50 50)");
+
+// Create the animateTransform element
+const animateTransform = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
+animateTransform.setAttribute("attributeName", "transform");
+animateTransform.setAttribute("type", "rotate");
+animateTransform.setAttribute("calcMode", "linear");
+animateTransform.setAttribute("values", "0 50 50;180 50 50;720 50 50");
+animateTransform.setAttribute("keyTimes", "0;0.5;1");
+animateTransform.setAttribute("dur", "1s");
+animateTransform.setAttribute("begin", "0s");
+animateTransform.setAttribute("repeatCount", "indefinite");
+
+// Create the animate element
+const animate = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+animate.setAttribute("attributeName", "stroke-dasharray");
+animate.setAttribute("calcMode", "linear");
+animate.setAttribute("values", "18.84955592153876 169.64600329384882;94.2477796076938 94.24777960769377;18.84955592153876 169.64600329384882");
+animate.setAttribute("keyTimes", "0;0.5;1");
+animate.setAttribute("dur", "1");
+animate.setAttribute("begin", "0s");
+animate.setAttribute("repeatCount", "indefinite");
+
+// Append the elements to the SVG
+circle2.appendChild(animateTransform);
+circle2.appendChild(animate);
+svg.appendChild(circle1);
+svg.appendChild(circle2);
+// Append the SVG element to the DOM
+moreActionsButton.appendChild(svg);
+
+setTimeout(() => {
+    if (svg.parentNode) {
+        drawFailureMark()
+    }
+  }, 60000);
+}
+
+
+function drawSuccessMark() {
+  var svg = document.querySelector("#imaruSvg");
+  // Create the success mark path
+  const successPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  successPath.setAttribute("d", "M35,50 L45,70 L80,35");
+  successPath.setAttribute("fill", "none");
+  successPath.setAttribute("stroke", "#4CAF50");
+  successPath.setAttribute("stroke-width", "12");
+  successPath.setAttribute("stroke-linecap", "round");
+  successPath.setAttribute("stroke-linejoin", "round");
+  successPath.setAttribute("stroke-dasharray", "90");
+  successPath.setAttribute("stroke-dashoffset", "90");
+  successPath.style.transition = "stroke-dashoffset 1s ease-out";
+  svg.appendChild(successPath);
+
+  // Animate the checkmark by updating the stroke-dashoffset property
+  setTimeout(() => {
+    successPath.setAttribute("stroke-dashoffset", "0");
+  }, 100);
+
+    setTimeout(() => {
+    svg.style.transition = "opacity 0.5s ease-out";
+    svg.style.opacity = "0";
+
+    // Remove the SVG element after the fade-out effect
+    setTimeout(() => {
+      if (svg.parentNode) {
+        svg.parentNode.removeChild(svg);
+      }
+    }, 1000);
+  }, 1000);
+
+}
+
+function drawFailureMark() {
+  var svg = document.querySelector("#imaruSvg");
+  const line1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  line1.setAttribute("d", "M30,30 C40,20 55,55 70,70");
+  line1.setAttribute("fill", "none");
+  line1.setAttribute("stroke", "#f44336");
+  line1.setAttribute("stroke-width", "12");
+  line1.setAttribute("stroke-linecap", "round");
+  line1.setAttribute("stroke-linejoin", "round");
+  line1.setAttribute("stroke-dasharray", "60");
+  line1.setAttribute("stroke-dashoffset", "60");
+  line1.style.transition = "stroke-dashoffset 0.5s ease-out";
+  svg.appendChild(line1);
+
+  // Create the second line of the "X"
+  const line2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  line2.setAttribute("d", "M30,70 C45,55 55,20 70,30");
+  line2.setAttribute("fill", "none");
+  line2.setAttribute("stroke", "#f44336");
+  line2.setAttribute("stroke-width", "12");
+  line2.setAttribute("stroke-linecap", "round");
+  line2.setAttribute("stroke-linejoin", "round");
+  line2.setAttribute("stroke-dasharray", "60");
+  line2.setAttribute("stroke-dashoffset", "-60");
+  line2.style.transition = "stroke-dashoffset 0.5s ease-out 0.5s";
+  svg.appendChild(line2);
+
+
+  // Animate the first line from right to left
+  setTimeout(() => {
+    line1.setAttribute("stroke-dashoffset", "0");
+  }, 100);
+
+  // Animate the second line from left to right
+  setTimeout(() => {
+    line2.setAttribute("stroke-dashoffset", "0");
+  }, 100);
+
+  // Fade-out effect
+  setTimeout(() => {
+    svg.style.transition = "opacity 0.5s ease-out";
+    svg.style.opacity = "0";
+
+    // Remove the SVG element after the fade-out effect
+    setTimeout(() => {
+      if (svg.parentNode) {
+        svg.parentNode.removeChild(svg);
+      }
+    }, 1000);
+  }, 2000);
+}
 
     function imarunettuRunAutoQC(language = window.imarunettuLang) {
         //here the scopes get REALLY interesting
@@ -153,7 +315,7 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
             var qcMeta = {}
             qcMeta.lang = LANG
             if (decodeURIComponent(document.location.href)
-                .includes("originator.backlot.netflix.com")) {
+                .includes("timedtext.netflixstudios.com")) {
                 var our_clq = decodeURIComponent(document.location.href)
                     .split(":")[3]
                 if (our_clq) {
@@ -174,9 +336,9 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
                     typeof our_clq))
             }
 
-            function setShotChanges() {
+            function setShotChangesAndEvents() {
                 if (typeof our_clq !== "object" && document.location.href.includes(
-                        "originator.backlot.netflix.com")) {
+                        "timedtext.netflixstudios.com")) {
                     var getJSON = function(url, callback) {
                         var xhr = new XMLHttpRequest();
                         xhr.open('GET', url, true);
@@ -194,7 +356,7 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
                     if (!localStorage.getItem("shotChanges:" + our_clq)) {
                         if (!outOfTheBox) {
                             getJSON(
-                                "https://originator.backlot.netflix.com/api/request/shotchanges/clq:origination:" +
+                                "https://timedtext.netflixstudios.com/nqapi/request/shotchanges/clq:origination:" +
                                 our_clq,
                                 function(err, data) {
                                     if (err !== null) {
@@ -203,6 +365,7 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
                                             '\nIf it\'s 500-something, please reload the page and try again.'
                                         );
                                     } else {
+
                                         localStorage.setItem("shotChanges:" + our_clq,
                                             data["frameNumbers"])
                                         qcMeta.SC = data["frameNumbers"]
@@ -219,11 +382,49 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
                             " already present in localStorage")
                         qcMeta.SC = localStorage.getItem("shotChanges:" + our_clq)
                     }
+
+                    if (!localStorage.getItem("clq:origination:" + our_clq)) {
+                        
+                        getJSON(
+                            "https://timedtext.netflixstudios.com/nqapi/request/getDetails/clq:origination:" +
+                            our_clq,
+                            function(err, data) {
+                                if (err !== null) {
+                                    alert("Something went wrong with error status: " +
+                                        err +
+                                        "\nIf it's 500-something, please reload the page and try again."
+                                    );
+                                } else {
+                                    var events = '{"meta":' + JSON.stringify(data["media"]["meta"]) + ',"events":' + JSON.stringify(data["events"]) + '}';
+                                    localStorage.setItem("clq:origination:" + our_clq, events)
+                                    qcMeta.events = data["events"]
+                                    qcMeta.meta = data["media"]["meta"]
+                                    console.log("DEBUG: Timed text events for " +
+                                        our_clq + " saved in localStorage")
+                                }
+                            })
+
+                    } else {
+                        console.log("DEBUG: Timed text events for " + our_clq +
+                            " already present in localStorage")
+                        var events_and_meta = JSON.parse(localStorage.getItem("clq:origination:" + our_clq))
+                        qcMeta.events = events_and_meta["events"]
+                        qcMeta.meta = events_and_meta["meta"]
+
+                        alert("Timed text events found in Local Storage for " +
+                            our_clq + "without requesting from Netflix servers.\n" +
+
+                            "Report me to the developer with the good news: Netflix has finaly fixed issues with writing data to local storage (i.e. saving locally to disk). Hooray!\n" +
+
+                            "Proceeding to use the events found in Local Storage.");
+
+                    }
                 }
             }
 
             function defer(method) {
-                if (localStorage.getItem("shotChanges:" + our_clq) ||
+                if ((localStorage.getItem("shotChanges:" + our_clq) &&
+                        localStorage.getItem("clq:origination:" + our_clq)) ||
                     typeof our_clq == "object") {
                     setTimeout(function() {
                         runAutoQC(our_clq);
@@ -278,6 +479,8 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
                             max_cps = 26
                             break;
                         case "CN":
+                        case "ZH-HANS":
+                        case "ZH-HANT":
                             line_limit = 16
                             normal_cps = 9
                             max_cps = 11.7
@@ -323,16 +526,37 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
                     } catch (e) {
                         var shotChanges = undefined;
                         console.log(
-                            "DEBUG: No shot changes found, which is ok if our_clq is object: " +
+                            "DEBUG: No shot changes found, which is okay if our_clq is object: " +
                             (typeof our_clq))
                     }
+
+                    var events_and_meta = JSON.parse(localStorage.getItem("clq:origination:" +
+                        our_clq))
+                    try {
+                        var events = JSON.stringify(events_and_meta["events"]).split(",");
+                        console.log("DEBUG: Events validated.")
+                    } catch (e) {
+                        var events = undefined;
+                        console.log(
+                            "DEBUG: No events found. ")
+                        alert("No events found. Report me to the developer.");
+                        return null
+                    }
+                    try {
+                        var meta = JSON.stringify(events_and_meta["meta"]).split(",");
+                        console.log("DEBUG: Metadata validated.")
+                    } catch (e) {
+                        var meta = undefined;
+                        console.log(
+                            "DEBUG: No metadata found. ")
+                        alert("No metadata found. Report me to the developer.");
+                    }
+
                     var hasSafeBox = document.getElementsByClassName(
                         "marketing-border")[0] ? true : false
                     try {
-                        var userIp = document.getElementsByClassName(
-                            "Watermark")[0].innerHTML;
-                        var userName = document.getElementsByClassName(
-                            "username")[0].textContent;
+                        var userIp = "";
+                        var userName = document.querySelector("#media-player-content-view > div.watermark > svg > text:nth-child(2)").textContent;
                     } catch (e) {
                         var userIp = "LOCAL ITERATION"
                     }
@@ -679,17 +903,20 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
 
                   <div id="stick" style="position:relative;left:750px;"><button type="button" class="f" onclick="alert(Window.autoQC_safe_meta)">🛈</button><button type="button" class="f" onclick="z(\'cSpace\')" title="Highlight whitespace">🟩</button><button title="Display minor issues" type="button" class="f" onclick="z(\'minor_issue\') ">⚠️</button><button title="Display major issues" type="button" class="f" onclick="z(\'major_issue\')">🚫</button><button title="Shot-change suggestions" type="button" onclick="z(\'shot_change_issue\') ">🎞</button>DLFIXSRTTOKEN<span style="position: relative; top: 3px; left: 165px; font-family: monospace; color: #fdfdf2; opacity: 0.33;">Linguist: LINGUISTNAME</div>`
                     if (document.location.href.includes(
-                            "originator.backlot.netflix.com")) {
+                            "timedtext.netflixstudios.com")) {
+
+
                         var lsJson = localStorage["clq:origination:" +
                             decodeURIComponent(our_clq)]
+
+
                         if (!lsJson) {
-                            alert("Timed text events not found in localStorage\nfor CLQ: " +
-                                our_clq + "\n" +
-                                "If the CLQ is correct and" + "\n" +
-                                "\"Save to local storage\" is enabled in Settings," +
-                                "\n" + "save the task and try again.");
-                            return null
+                            alert("Timed text events not found in Local Storage for CLQ: " + our_clq + "\nReport me to the developer.");
+                            throw new Error
+
                         }
+
+
                         var json_obj = JSON.parse(lsJson)
                         var src = json_obj["events"]
                         var fps_ = json_obj["meta"]["fps"];
@@ -742,7 +969,7 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
                     console.log("Using " + fpsHalfSecond +
                         " frames as target gap/shot change mark")
                     if (document.location.href.includes(
-                            "originator.backlot.netflix.com")) {
+                            "timedtext.netflixstudios.com")) {
                         var titleInfo = document.getElementsByClassName(
                                 "cpe-page-menu-label")[0].innerText.replace(
                                 / "/g, ' “')
@@ -1712,7 +1939,7 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
                         ];
                         return n(t), i[7] + t[7] + e[7]
                     }
-                    localStorage.removeItem("shotChanges:" + qcMeta.clq)
+
                     var qcMetaStr = "`" + JSON.stringify(qcMeta, null, 2) +
                         "`"
                     if (typeof userName == "undefined") {
@@ -1721,7 +1948,7 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
                     reportHtml = reportHtml.replace("DLFIXSRTTOKEN",
                             suggestedFixesTxt)
                         .replace(
-                            /WATERMARKPLACEHOLDER/g, userIp)
+                            /WATERMARKPLACEHOLDER/g, userName)
                         .replace(
                             "TITLEINFOTOKEN", titleInfo)
                         .replace(
@@ -1730,9 +1957,13 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
                             "LINGUISTNAME", userName)
                         .replace("METADATATOKEN",
                             qcMetaStr)
-                    console.log(qcMeta.results)
-                    download(srtName("Auto_QC_Log_" + LANG + '_' + fps_ +
-                        withSC, ".html"), reportHtml)
+                    console.log(qcMeta.results);
+                    drawSuccessMark();
+                    download(srtName("Auto_QC_Log_" + LANG + '_' + fps_ + withSC, ".html"), reportHtml);
+                    localStorage.removeItem("shotChanges:" + qcMeta.clq)
+                    localStorage.removeItem("clq:origination:" + qcMeta.clq)
+                    console.log(
+                        "DEBUG: Flushing data from localStorage.")
                 }
                 return runAutoQC
             })));
@@ -1818,29 +2049,137 @@ if (window.location.hostname == "localization-lucid.netflix.com") {
                 }
                 return parseSRT;
             })));
-            setShotChanges()
+            setShotChangesAndEvents()
             defer(runAutoQC)
         })()
     }
 
     function imarunettuDoubleExportSRT() {
         (function() {
-            var our_clq = document.location.href.toString()
+            var our_clq = decodeURIComponent(document.location.href.toString())
                 .split("=")[1].split(
                     ":")[2]
-            var clq_pattern = new RegExp(
-                '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
-                'i');
-            if (!our_clq || !clq_pattern.test(our_clq)) {
-                alert("You must be in a started, saved Originator task!");
-                throw new Error
+
+            function setEvents() {
+                if (typeof our_clq !== "object" && document.location.href.includes(
+                        "timedtext.netflixstudios.com")) {
+                    var getJSON = function(url, callback) {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('GET', url, true);
+                        xhr.responseType = 'json';
+                        xhr.onload = function() {
+                            var status = xhr.status;
+                            if (status === 200) {
+                                callback(null, xhr.response);
+                            } else {
+                                callback(status, xhr.response);
+                            }
+                        };
+                        xhr.send();
+                    }
+
+
+                    if (!localStorage.getItem("clq:origination:" + our_clq)) {
+                        
+                        getJSON(
+                            "https://timedtext.netflixstudios.com/nqapi/request/getDetails/clq:origination:" +
+                            our_clq,
+                            function(err, data) {
+                                if (err !== null) {
+                                    alert("Something went wrong with error status: " +
+                                        err +
+                                        "\nIf it's 500-something, please reload the page and try again."
+                                    );
+                                } else {
+                                    var events = '{"meta":' + JSON.stringify(data["media"]["meta"]) + ',"events":' + JSON.stringify(data["events"]) + '}';
+                                    localStorage.setItem("clq:origination:" + our_clq, events)
+
+                                    console.log("DEBUG: Timed text events for " +
+                                        our_clq + " saved in localStorage")
+                                }
+                            })
+
+                    } else {
+                        console.log("DEBUG: Timed text events for " + our_clq +
+                            " already present in localStorage")
+
+                        alert("Timed text events found in Local Storage for " +
+                            our_clq + "without requesting from Netflix servers.\n" +
+
+                            "Report me to the developer with the good news: Netflix has finaly fixed issues with writing data to local storage (i.e. saving locally to disk). Hooray!\n" +
+
+                            "Proceeding to use the events found in Local Storage.");
+
+                    }
+                }
             }
-            if (!clq_pattern.test(our_clq)) {
-                alert("The CLQ is invalid: " + our_clq + "\n" +
-                    "Please report me to the developer.");
-                throw new Error
+
+            function defer(method) {
+                if (localStorage.getItem("clq:origination:" + our_clq) ||
+                    typeof our_clq == "object") {
+                    setTimeout(function() {
+                        runExport(our_clq);
+                    }, 2400);
+                } else {
+                    setTimeout(function() {
+                        defer(runExport)
+                    }, 350);
+                }
             }
-            var bilingualHtml = `
+            (function(global, factory) {
+                typeof exports === 'object' && typeof module !== 'undefined' ?
+                    module.exports = factory() : typeof define === 'function' &&
+                    define.amd ? define(factory) : (global.runExport = factory());
+            }(this, (function() {
+                'use strict';
+
+                function uid() {
+                    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11)
+                        .replace(
+                            /[018]/g, c => (c ^ crypto.getRandomValues(
+                                new Uint8Array(1))[0] & 15 >> c / 4)
+                            .toString(
+                                16))
+                }
+
+                function runExport() {
+                    var clq_pattern = new RegExp(
+                        '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+                        'i');
+                    if (!our_clq || !clq_pattern.test(our_clq)) {
+                        alert("You must be in a started, saved Originator task!");
+                        throw new Error
+                    }
+                    if (!clq_pattern.test(our_clq)) {
+                        alert("The CLQ is invalid: " + our_clq + "\n" +
+                            "Please report me to the developer.");
+                        throw new Error
+                    }
+
+                    var events_and_meta = JSON.parse(localStorage.getItem("clq:origination:" +
+                        our_clq))
+                    try {
+                        var events = JSON.stringify(events_and_meta["events"]).split(",");
+                        console.log("DEBUG: Events validated.")
+                    } catch (e) {
+                        var events = undefined;
+                        console.log(
+                            "DEBUG: No events found. ")
+                        alert("No events found. Report me to the developer.");
+                        return null
+                    }
+                    try {
+                        var meta = JSON.stringify(events_and_meta["meta"]).split(",");
+                        console.log("DEBUG: Metadata validated.")
+                    } catch (e) {
+                        var meta = undefined;
+                        console.log(
+                            "DEBUG: No metadata found. ")
+                        alert("No metadata found. Report me to the developer.");
+                    }
+
+
+                    var bilingualHtml = `
         var prevScrollpos=window.pageYOffset;
 window.onscroll=function() {
     var currentScrollPos=window.pageYOffset;
@@ -2158,335 +2497,452 @@ document.onkeydown = function(event){
       </thead>
       <tbody>
       `
-            var lsJson = localStorage["clq:origination:" + our_clq]
-            if (!lsJson) {
-                alert("Timed text events not found in localStorage\nfor CLQ: " +
-                    our_clq + "\n" + "If the CLQ is correct and" + "\n" +
-                    "\"Save to local storage\" is enabled in Settings," + "\n" +
-                    "save the task and try again.");
-                throw new Error
-            }
-            var json_obj = JSON.parse(lsJson)
-            var src = json_obj["events"]
-            var fps_ = json_obj["meta"]["fps"]
-            var fps = fps_.split("_")[1] / 100
-            //From {"fps":"FPS_2500"}
-            var proposed_fps = prompt(
-                "DOUBLE EXPORT SRT reports…\n\nPress Enter to accept framerate of " +
-                fps + " or enter new as 2400 or 2997:");
-            if (proposed_fps !== "") {
-                var int_fps = proposed_fps.substring(0, 2);
-                var decimal_fps = proposed_fps.substring(2, proposed_fps.length);
-                fps_ = "FPS" + "_" + int_fps + decimal_fps
-                fps = (int_fps + "." + decimal_fps) * 1;
-            }
-            var mid = json_obj["meta"]["movieId"]
-            var pid = json_obj["meta"]["packageId"]
-            var which_url = prompt(
-                "DOUBLE EXPORT SRT reports…\n\nPress Enter to try the template. Enter anything to go for CC."
-            )
-            var which_lang = prompt(
-                "DOUBLE EXPORT SRT reports…\n\nPress Enter to go for English. Enter a language code to try that (es/fr/ru/etc).",
-                "en");
-            if (which_lang == "") {
-                which_lang = "en"
-            }
-            if (which_url == "") {
-                var template_url =
-                    "https://originator.backlot.netflix.com/api/request/timedText/" +
-                    our_clq + '/' + pid + '/' + mid + '/' + which_lang + '/TEMPLATE/PRIMARY/' +
-                    fps_ + '?source=ORIGINATOR'
-            } else {
-                var template_url =
-                    "https://originator.backlot.netflix.com/api/request/timedText/" +
-                    our_clq + '/' + pid + '/' + mid + '/' + which_lang + '/CC/PRIMARY/' + fps_ +
-                    '?source=ARCHIVE'
-            }
-            var targetFilename = srtName(fps_ + "_TRANSLATION")
-            var sourceFilename = srtName(fps_ + "_SOURCE")
-            var backupFilename = srtName(fps_ + "_BILINGUAL_TABLE")
-                .replace(".srt",
-                    ".html")
-            var frms = 1000 / fps
-            async function getSourceColumnEvents() {
-                var result = await (await fetch(template_url))
-                    .json();
-                return result;
-            }
-            async function delayedDownload() {
-                var result = await getSourceColumnEvents();
-                download(sourceFilename, array2srt(result))
-                //  download(backupFilename, arrays2html(result, src),"html" )
-            }
-            delayedDownload()
-            download(targetFilename, array2srt(src))
-
-            function srtName(suffix = "") {
-                var s = document.getElementsByClassName("cpe-page-menu-label")[0]
-                    .innerText
-                var srtName = (s.replace(/[ ]/g, '_')
-                        .replace(/[^a-z0-9_]/gi, '') +
-                        suffix + ".srt"
-                    ) //This gets rid of all punctuation, spaces and non-English letters
-                    .trim() //resulting in a name like 14545_El_Burrito_A_Breaking_Fat_Movie_FPS_2500.srt
-                if (!srtName) srtName = our_clq + "_" + suffix +
-                    ".srt" //Fallback measure. Useful for debugging later
-                return srtName
-            }
-
-            function frames2timecode(frames) { //frames to 00:01:02,000 format
-                var milliseconds = Math.round(frames * frms)
-                var srt_timecode = TimeConversion(milliseconds)
-                return srt_timecode
-            }
-
-            function merge_same(array) {
-                var merged = []
-                var skip_next = false
-                for (i = 0; i < array.length - 1; i++) {
-                    if (!skip_next) {
-                        thisEvent = array[i]
-                        nextEvent = array[i + 1]
-                        if (thisEvent[5] == nextEvent[5]) {
-                            skip_next = true
-                            thisEvent[2] = thisEvent[2] + "\n" + nextEvent[2]
-                            thisEvent[1] = nextEvent[1]
-                        }
-                        merged.push(thisEvent)
+                    var lsJson = localStorage["clq:origination:" + our_clq]
+                    if (!lsJson) {
+                        alert("Timed text events not found in Local Storage for CLQ: " +
+                            our_clq + "\nReport me to the developer.");
+                        throw new Error
+                    }
+                    var json_obj = JSON.parse(lsJson)
+                    var src = json_obj["events"]
+                    var fps_ = json_obj["meta"]["fps"]
+                    var fps = fps_.split("_")[1] / 100
+                    //From {"fps":"FPS_2500"}
+                    var proposed_fps = prompt(
+                        "DOUBLE EXPORT SRT reports…\n\nPress Enter to accept framerate of " +
+                        fps + " or enter new as 2400 or 2997:");
+                    if (proposed_fps !== "") {
+                        var int_fps = proposed_fps.substring(0, 2);
+                        var decimal_fps = proposed_fps.substring(2, proposed_fps.length);
+                        fps_ = "FPS" + "_" + int_fps + decimal_fps
+                        fps = (int_fps + "." + decimal_fps) * 1;
+                    }
+                    var mid = json_obj["meta"]["movieId"]
+                    var pid = json_obj["meta"]["packageId"]
+                    var which_url = prompt(
+                        "DOUBLE EXPORT SRT reports…\n\nPress Enter to try the template. Enter anything to go for CC."
+                    )
+                    var which_lang = prompt(
+                        "DOUBLE EXPORT SRT reports…\n\nPress Enter to go for English. Enter a language code to try that (es/fr/ru/etc).",
+                        "en");
+                    if (which_lang == "") {
+                        which_lang = "en"
+                    }
+                    if (which_url == "") {
+                        var template_url =
+                            "https://timedtext.netflixstudios.com/nqapi/request/timedText/" +
+                            our_clq + '/' + pid + '/' + mid + '/' + which_lang + '/TEMPLATE/PRIMARY/' +
+                            fps_ + '?source=ORIGINATOR'
                     } else {
-                        skip_next = false
+                        var template_url =
+                            "https://timedtext.netflixstudios.com/nqapi/request/timedText/" +
+                            our_clq + '/' + pid + '/' + mid + '/' + which_lang + '/CC/PRIMARY/' + fps_ +
+                            '?source=ARCHIVE'
+                    }
+                    var targetFilename = srtName(fps_ + "_TRANSLATION")
+                    var sourceFilename = srtName(fps_ + "_SOURCE")
+                    var backupFilename = srtName(fps_ + "_BILINGUAL_TABLE")
+                        .replace(".srt",
+                            ".html")
+                    var frms = 1000 / fps
+                    async function getSourceColumnEvents() {
+                        var result = await (await fetch(template_url))
+                            .json();
+                        return result;
+                    }
+                    async function delayedDownload() {
+                        var result = await getSourceColumnEvents();
+                        drawSuccessMark();
+                        download(sourceFilename, array2srt(result))
+                        //  download(backupFilename, arrays2html(result, src),"html" )
+                    }
+                    delayedDownload();
+                    download(targetFilename, array2srt(src))
+                    localStorage.removeItem("clq:origination:" + our_clq)
+                    console.log(
+                        "DEBUG: Flushing data from localStorage.")
+
+                    function srtName(suffix = "") {
+                        var s = document.getElementsByClassName("cpe-page-menu-label")[0]
+                            .innerText
+                        var srtName = (s.replace(/[ ]/g, '_')
+                                .replace(/[^a-z0-9_]/gi, '') +
+                                suffix + ".srt"
+                            ) //This gets rid of all punctuation, spaces and non-English letters
+                            .trim() //resulting in a name like 14545_El_Burrito_A_Breaking_Fat_Movie_FPS_2500.srt
+                        if (!srtName) srtName = our_clq + "_" + suffix +
+                            ".srt" //Fallback measure. Useful for debugging later
+                        return srtName
+                    }
+
+                    function frames2timecode(frames) { //frames to 00:01:02,000 format
+                        var milliseconds = Math.round(frames * frms)
+                        var srt_timecode = TimeConversion(milliseconds)
+                        return srt_timecode
+                    }
+
+                    function merge_same(array) {
+                        var merged = []
+                        var skip_next = false
+                        for (var i = 0; i < array.length - 1; i++) {
+                            if (!skip_next) {
+                                var thisEvent = array[i]
+                                var nextEvent = array[i + 1]
+                                if (thisEvent[5] == nextEvent[5]) {
+                                    skip_next = true
+                                    thisEvent[2] = thisEvent[2] + "\n" + nextEvent[2]
+                                    thisEvent[1] = nextEvent[1]
+                                }
+                                merged.push(thisEvent)
+                            } else {
+                                skip_next = false
+                            }
+                        }
+                        return merged
+                    }
+
+                    function arrays2html(events_object, events_object2) {
+                        var ordered_events = []
+                        var col = "SRC"
+                        for (var id in events_object) {
+                            events_object[id]["column"] = col
+                            try {
+                                var type_fn = events_object[id]["type"]
+                                if (type_fn === "fn") {
+                                    events_object[id]["txt"] += "<b></b>";
+                                    type_fn = undefined;
+                                }
+                            } catch (e) {}
+                            ordered_events.push([
+                                events_object[id]["start"], events_object[id]["end"],
+                                events_object[id]
+                                ["txt"],
+                                events_object[id]
+                                ["styles"],
+                                events_object[id]
+                                ["rgn"],
+                                events_object[id]
+                                ["column"],
+                            ])
+                        }
+                        var col = "TRG"
+                        for (var id in events_object2) {
+                            events_object2[id]["column"] = col
+                            ordered_events.push([
+                                events_object2[id]["start"], events_object2[id]["end"],
+                                events_object2[id]
+                                ["txt"],
+                                events_object2[id]
+                                ["styles"],
+                                events_object2[id]
+                                ["rgn"],
+                                events_object2[id]
+                                ["column"],
+                            ])
+                        }
+                        ordered_events.sort(function(a, b) {
+                            return a[0] - b[0];
+                        }); //Array sorted by in_cues, sequentially
+                        ordered_events = merge_same(ordered_events)
+                        //    ordered_events.sort(function (a
+                        //        , b) {
+                        //        return a[1] - b[1];
+                        //    }); //Array sorted by out_cues this time, because merge_same changes some, sequentially
+                        var index = 0
+                        var srt_txt = bilingualHtml;
+                        var eol = ""
+                        var source_content = ''
+                        for (event of ordered_events) {
+                            var start = frames2timecode(event[0])
+                            var end = frames2timecode(event[1])
+                            var startend = start + "\n" + end
+                            try {
+                                if (typeof event[3][0]["type"] !== "undefined") {
+                                    if (event[3][0]["type"] == "italic") {
+                                        content = italicize(content, event[3])
+                                    }
+                                }
+                            } catch (e) {}
+                            if (event[5] == "SRC") {
+                                source_content += event[2]
+                            } else {
+                                tr = '<tr><td><pre>' + startend + '</pre></td><td><pre>' +
+                                    source_content + '</pre></td><td><pre>' + event[2] +
+                                    '</pre></td></tr>' + "\n";
+                                srt_txt += tr;
+                                tr = "";
+                                source_content = ""
+                            }
+                        }
+                        var titleinfo = document.getElementsByClassName(
+                                "cpe-page-menu-label")[0].innerText.replace(/ "/, " “")
+                            .replace(/"/, "”")
+                        var titlelink = document.location.href
+                        var titledate = new Date()
+                            .toISOString()
+                            .slice(0, 10)
+                        srt_txt = srt_txt.replace(/TITLEINFO/g, titleinfo)
+                            .replace(
+                                /TITLELINK/, titlelink)
+                            .replace(/TITLEDATE/g, titledate)
+                        return srt_txt
+                    }
+
+                    function array2srt(events_object) {
+                        var ordered_events = []
+                        for (var id in events_object) {
+                            try {
+                                var type_fn = events_object[id]["type"]
+                                if (type_fn === "fn") {
+                                    events_object[id]["txt"] += "<b></b>";
+                                    type_fn = undefined;
+                                }
+                            } catch (e) {}
+                            ordered_events.push([
+                                events_object[id]["start"], events_object[id]["end"],
+                                events_object[id]
+                                ["txt"],
+                                events_object[id]
+                                ["styles"],
+                                events_object[id]
+                                ["rgn"]
+                            ])
+                        }
+                        ordered_events.sort(function(a, b) {
+                            return a[0] - b[0];
+                        }); //Array sorted by in_cues, sequentially
+                        var index = 0
+                        var srt_txt = ''
+                        for (event of ordered_events) {
+                            index++
+                            var start = frames2timecode(event[0])
+                            var end = frames2timecode(event[1])
+                            var content = event[2]
+                            try {
+                                if (typeof event[3][0]["type"] !== "undefined") {
+                                    if (event[3][0]["type"] == "italic") {
+                                        content = italicize(content, event[3])
+                                    }
+                                }
+                            } catch (e) {}
+                            try {
+                                if (typeof event[4] !== "undefined") {
+                                    if (event[4] == "top") {
+                                        content = "{\\an8}" + content
+                                    }
+                                }
+                            } catch (e) {}
+                            try {
+                                if (event["type"] == "fn") {
+                                    content += '<b></b>'
+                                }
+                            } catch (e) {}
+                            console.log(content)
+                            var current_event = index + "\n" + start + " --> " + end + "\n" +
+                                content + "\n"
+                            srt_txt += current_event + "\n"
+                        }
+                        return srt_txt
+                    }
+
+                    function italicize(content, italics_array) {
+                        var position_offset = 0
+                        for (var italic of italics_array) {
+                            var position_from = italic["from"] + position_offset;
+                            position_offset += 3
+                            content = [content.slice(0, position_from), "<i>", content.slice(
+                                position_from)].join('')
+                            var position_to = italic["to"] + position_offset;
+                            position_offset += 4
+                            content = [content.slice(0, position_to), "</i>", content.slice(
+                                position_to)].join('')
+                        }
+                        return content
+                    }
+
+                    function download(filename, text, type = "plain") {
+                        var element = document.createElement('a');
+                        element.setAttribute('href', 'data:text/' + type +
+                            ';charset=utf-8,%EF%BB%BF' + encodeURIComponent(text));
+                        element.setAttribute('download', filename);
+                        element.style.display = 'none';
+                        document.body.appendChild(element);
+                        element.click();
+                        document.body.removeChild(element);
+                    }
+
+                    function TimeConversion(duration) {
+                        let time = parseDuration(duration)
+                        return formatTimeHMSS(time)
+                    }
+
+                    function parseDuration(duration) {
+                        let remain = duration
+                        let hours = Math.floor(remain / (1000 * 60 * 60))
+                        remain = remain % (1000 * 60 * 60)
+                        let minutes = Math.floor(remain / (1000 * 60))
+                        remain = remain % (1000 * 60)
+                        let seconds = Math.floor(remain / (1000))
+                        remain = remain % (1000)
+                        let milliseconds = remain
+                        return {
+                            hours,
+                            minutes,
+                            seconds,
+                            milliseconds
+                        }
+                    }
+
+                    function formatTimeHMSS(o) {
+                        let hours = o.hours.toString()
+                        if (hours.length === 1) hours = '0' + hours
+                        let minutes = o.minutes.toString()
+                        if (minutes.length === 1) minutes = '0' + minutes
+                        let seconds = o.seconds.toString()
+                        if (seconds.length === 1) seconds = '0' + seconds
+                        let milliseconds = o.milliseconds.toString()
+                        if (milliseconds.length === 1) milliseconds = '00' + milliseconds
+                        if (milliseconds.length === 2) milliseconds = '0' + milliseconds
+                        return hours + ":" + minutes + ":" +
+                            //Example: 00:01:02,999 -- note that the SRT spec calls for a comma, not a period!
+                            seconds + "," + milliseconds
                     }
                 }
-                return merged
-            }
-
-            function arrays2html(events_object, events_object2) {
-                var ordered_events = []
-                var col = "SRC"
-                for (var id in events_object) {
-                    events_object[id]["column"] = col
-                    try {
-                        var type_fn = events_object[id]["type"]
-                        if (type_fn === "fn") {
-                            events_object[id]["txt"] += "<b></b>";
-                            type_fn = undefined;
-                        }
-                    } catch (e) {}
-                    ordered_events.push([
-                        events_object[id]["start"], events_object[id]["end"],
-                        events_object[id]
-                        ["txt"],
-                        events_object[id]
-                        ["styles"],
-                        events_object[id]
-                        ["rgn"],
-                        events_object[id]
-                        ["column"],
-                    ])
-                }
-                var col = "TRG"
-                for (var id in events_object2) {
-                    events_object2[id]["column"] = col
-                    ordered_events.push([
-                        events_object2[id]["start"], events_object2[id]["end"],
-                        events_object2[id]
-                        ["txt"],
-                        events_object2[id]
-                        ["styles"],
-                        events_object2[id]
-                        ["rgn"],
-                        events_object2[id]
-                        ["column"],
-                    ])
-                }
-                ordered_events.sort(function(a, b) {
-                    return a[0] - b[0];
-                }); //Array sorted by in_cues, sequentially
-                ordered_events = merge_same(ordered_events)
-                //    ordered_events.sort(function (a
-                //        , b) {
-                //        return a[1] - b[1];
-                //    }); //Array sorted by out_cues this time, because merge_same changes some, sequentially
-                var index = 0
-                var srt_txt = bilingualHtml;
-                var eol = ""
-                var source_content = ''
-                for (event of ordered_events) {
-                    var start = frames2timecode(event[0])
-                    var end = frames2timecode(event[1])
-                    var startend = start + "\n" + end
-                    try {
-                        if (typeof event[3][0]["type"] !== "undefined") {
-                            if (event[3][0]["type"] == "italic") {
-                                content = italicize(content, event[3])
-                            }
-                        }
-                    } catch (e) {}
-                    if (event[5] == "SRC") {
-                        source_content += event[2]
-                    } else {
-                        tr = '<tr><td><pre>' + startend + '</pre></td><td><pre>' +
-                            source_content + '</pre></td><td><pre>' + event[2] +
-                            '</pre></td></tr>' + "\n";
-                        srt_txt += tr;
-                        tr = "";
-                        source_content = ""
-                    }
-                }
-                var titleinfo = document.getElementsByClassName(
-                        "cpe-page-menu-label")[0].innerText.replace(/ "/, " “")
-                    .replace(/"/, "”")
-                var titlelink = document.location.href
-                var titledate = new Date()
-                    .toISOString()
-                    .slice(0, 10)
-                srt_txt = srt_txt.replace(/TITLEINFO/g, titleinfo)
-                    .replace(
-                        /TITLELINK/, titlelink)
-                    .replace(/TITLEDATE/g, titledate)
-                return srt_txt
-            }
-
-            function array2srt(events_object) {
-                var ordered_events = []
-                for (var id in events_object) {
-                    try {
-                        var type_fn = events_object[id]["type"]
-                        if (type_fn === "fn") {
-                            events_object[id]["txt"] += "<b></b>";
-                            type_fn = undefined;
-                        }
-                    } catch (e) {}
-                    ordered_events.push([
-                        events_object[id]["start"], events_object[id]["end"],
-                        events_object[id]
-                        ["txt"],
-                        events_object[id]
-                        ["styles"],
-                        events_object[id]
-                        ["rgn"]
-                    ])
-                }
-                ordered_events.sort(function(a, b) {
-                    return a[0] - b[0];
-                }); //Array sorted by in_cues, sequentially
-                var index = 0
-                var srt_txt = ''
-                for (event of ordered_events) {
-                    index++
-                    var start = frames2timecode(event[0])
-                    var end = frames2timecode(event[1])
-                    var content = event[2]
-                    try {
-                        if (typeof event[3][0]["type"] !== "undefined") {
-                            if (event[3][0]["type"] == "italic") {
-                                content = italicize(content, event[3])
-                            }
-                        }
-                    } catch (e) {}
-                    try {
-                        if (typeof event[4] !== "undefined") {
-                            if (event[4] == "top") {
-                                content = "{\\an8}" + content
-                            }
-                        }
-                    } catch (e) {}
-                    try {
-                        if (event["type"] == "fn") {
-                            content += '<b></b>'
-                        }
-                    } catch (e) {}
-                    console.log(content)
-                    var current_event = index + "\n" + start + " --> " + end + "\n" +
-                        content + "\n"
-                    srt_txt += current_event + "\n"
-                }
-                return srt_txt
-            }
-
-            function italicize(content, italics_array) {
-                position_offset = 0
-                for (var italic of italics_array) {
-                    var position_from = italic["from"] + position_offset;
-                    position_offset += 3
-                    content = [content.slice(0, position_from), "<i>", content.slice(
-                        position_from)].join('')
-                    var position_to = italic["to"] + position_offset;
-                    position_offset += 4
-                    content = [content.slice(0, position_to), "</i>", content.slice(
-                        position_to)].join('')
-                }
-                return content
-            }
-
-            function download(filename, text, type = "plain") {
-                var element = document.createElement('a');
-                element.setAttribute('href', 'data:text/' + type +
-                    ';charset=utf-8,%EF%BB%BF' + encodeURIComponent(text));
-                element.setAttribute('download', filename);
-                element.style.display = 'none';
-                document.body.appendChild(element);
-                element.click();
-                document.body.removeChild(element);
-            }
-
-            function TimeConversion(duration) {
-                let time = parseDuration(duration)
-                return formatTimeHMSS(time)
-            }
-
-            function parseDuration(duration) {
-                let remain = duration
-                let hours = Math.floor(remain / (1000 * 60 * 60))
-                remain = remain % (1000 * 60 * 60)
-                let minutes = Math.floor(remain / (1000 * 60))
-                remain = remain % (1000 * 60)
-                let seconds = Math.floor(remain / (1000))
-                remain = remain % (1000)
-                let milliseconds = remain
-                return {
-                    hours,
-                    minutes,
-                    seconds,
-                    milliseconds
-                }
-            }
-
-            function formatTimeHMSS(o) {
-                let hours = o.hours.toString()
-                if (hours.length === 1) hours = '0' + hours
-                let minutes = o.minutes.toString()
-                if (minutes.length === 1) minutes = '0' + minutes
-                let seconds = o.seconds.toString()
-                if (seconds.length === 1) seconds = '0' + seconds
-                let milliseconds = o.milliseconds.toString()
-                if (milliseconds.length === 1) milliseconds = '00' + milliseconds
-                if (milliseconds.length === 2) milliseconds = '0' + milliseconds
-                return hours + ":" + minutes + ":" +
-                    //Example: 00:01:02,999 -- note that the SRT spec calls for a comma, not a period!
-                    seconds + "," + milliseconds
-            }
+                return runExport
+            })));
+            setEvents()
+            defer(runExport)
         })();
+
+
+
+
+
     }
 
     function imarunettuBilingualExportHTML() {
         (function() {
-            var our_clq = document.location.href.toString()
+            var our_clq = decodeURIComponent(document.location.href.toString())
                 .split("=")[1].split(
                     ":")[2]
-            var clq_pattern = new RegExp(
-                '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
-                'i');
-            if (!our_clq || !clq_pattern.test(our_clq)) {
-                alert("You must be in a started, saved Originator task!");
-                throw new Error
+
+            function setEvents() {
+                if (typeof our_clq !== "object" && document.location.href.includes(
+                        "timedtext.netflixstudios.com")) {
+                    var getJSON = function(url, callback) {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('GET', url, true);
+                        xhr.responseType = 'json';
+                        xhr.onload = function() {
+                            var status = xhr.status;
+                            if (status === 200) {
+                                callback(null, xhr.response);
+                            } else {
+                                callback(status, xhr.response);
+                            }
+                        };
+                        xhr.send();
+                    }
+
+
+                    if (!localStorage.getItem("clq:origination:" + our_clq)) {
+                        
+                        getJSON(
+                            "https://timedtext.netflixstudios.com/nqapi/request/getDetails/clq:origination:" +
+                            our_clq,
+                            function(err, data) {
+                                if (err !== null) {
+                                    alert("Something went wrong with error status: " +
+                                        err +
+                                        "\nIf it's 500-something, please reload the page and try again."
+                                    );
+                                } else {
+                                    var events = '{"meta":' + JSON.stringify(data["media"]["meta"]) + ',"events":' + JSON.stringify(data["events"]) + '}';
+                                    localStorage.setItem("clq:origination:" + our_clq, events)
+
+                                    console.log("DEBUG: Timed text events for " +
+                                        our_clq + " saved in localStorage")
+                                }
+                            })
+
+                    } else {
+                        console.log("DEBUG: Timed text events for " + our_clq +
+                            " already present in localStorage")
+
+                        alert("Timed text events found in Local Storage for " +
+                            our_clq + "without requesting from Netflix servers.\n" +
+
+                            "Report me to the developer with the good news: Netflix has finaly fixed issues with writing data to local storage (i.e. saving locally to disk). Hooray!\n" +
+
+                            "Proceeding to use the events found in Local Storage.");
+
+                    }
+                }
             }
-            if (!clq_pattern.test(our_clq)) {
-                alert("The CLQ is invalid: " + our_clq + "\n" +
-                    "Please report me to the developer.");
-                throw new Error
+
+            function defer(method) {
+                if (localStorage.getItem("clq:origination:" + our_clq) ||
+                    typeof our_clq == "object") {
+                    setTimeout(function() {
+                        runBilingual(our_clq);
+                    }, 2400);
+                } else {
+                    setTimeout(function() {
+                        defer(runBilingual)
+                    }, 350);
+                }
             }
-            var bilingualHtml = `<head>
+            (function(global, factory) {
+                typeof exports === 'object' && typeof module !== 'undefined' ?
+                    module.exports = factory() : typeof define === 'function' &&
+                    define.amd ? define(factory) : (global.runBilingual = factory());
+            }(this, (function() {
+                'use strict';
+
+                function uid() {
+                    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11)
+                        .replace(
+                            /[018]/g, c => (c ^ crypto.getRandomValues(
+                                new Uint8Array(1))[0] & 15 >> c / 4)
+                            .toString(
+                                16))
+                }
+
+                function runBilingual() {
+                    var clq_pattern = new RegExp(
+                        '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+                        'i');
+                    if (!our_clq || !clq_pattern.test(our_clq)) {
+                        alert("You must be in a started, saved Originator task!");
+                        throw new Error
+                    }
+                    if (!clq_pattern.test(our_clq)) {
+                        alert("The CLQ is invalid: " + our_clq + "\n" +
+                            "Please report me to the developer.");
+                        throw new Error
+                    }
+                    var events_and_meta = JSON.parse(localStorage.getItem("clq:origination:" +
+                        our_clq))
+                    try {
+                        var events = JSON.stringify(events_and_meta["events"]).split(",");
+                        console.log("DEBUG: Events validated.")
+                    } catch (e) {
+                        var events = undefined;
+                        console.log(
+                            "DEBUG: No events found. ")
+                        alert("No events found. Report me to the developer.");
+                        return null
+                    }
+                    try {
+                        var meta = JSON.stringify(events_and_meta["meta"]).split(",");
+                        console.log("DEBUG: Metadata validated.")
+                    } catch (e) {
+                        var meta = undefined;
+                        console.log(
+                            "DEBUG: No metadata found. ")
+                        alert("No metadata found. Report me to the developer.");
+                    }
+                    var bilingualHtml = `<head>
       <script>
     console.log("Loading started...");
 </script>
@@ -2808,323 +3264,332 @@ document.onkeydown = function(event){
       </thead>
       <tbody>
       `
-            var lsJson = localStorage["clq:origination:" + our_clq]
-            if (!lsJson) {
-                alert("Timed text events not found in localStorage\nfor CLQ: " +
-                    our_clq + "\n" + "If the CLQ is correct and" + "\n" +
-                    "\"Save to local storage\" is enabled in Settings," + "\n" +
-                    "save the task and try again.");
-                throw new Error
-            }
-            var json_obj = JSON.parse(lsJson)
-            var src = json_obj["events"]
-            var fps_ = json_obj["meta"]["fps"]
-            var fps = fps_.split("_")[1] / 100
-            //From {"fps":"FPS_2500"}
-            var proposed_fps = prompt("Press Enter to accept framerate of " + fps +
-                " or enter new as 2400 or 2997:");
-            if (proposed_fps !== "") {
-                var int_fps = proposed_fps.substring(0, 2);
-                var decimal_fps = proposed_fps.substring(2, proposed_fps.length);
-                fps_ = "FPS" + "_" + int_fps + decimal_fps
-                fps = (int_fps + "." + decimal_fps) * 1;
-            }
-            var mid = json_obj["meta"]["movieId"]
-            var pid = json_obj["meta"]["packageId"]
-            var which_url = prompt(
-                "Press Enter to try the template. Enter anything to go for CC.")
-            var which_lang = prompt(
-                "DOUBLE EXPORT SRT reports…\n\nPress Enter to go for English. Enter a language code to try that (es/fr/ru/etc).",
-                "en");
-            if (which_lang == "") {
-                which_lang = "en"
-            }
-            if (which_url == "") {
-                var template_url =
-                    "https://originator.backlot.netflix.com/api/request/timedText/" +
-                    our_clq + '/' + pid + '/' + mid + '/' + which_lang + '/TEMPLATE/PRIMARY/' +
-                    fps_ + '?source=ORIGINATOR'
-            } else {
-                var template_url =
-                    "https://originator.backlot.netflix.com/api/request/timedText/" +
-                    our_clq + '/' + pid + '/' + mid + '/' + which_lang + '/CC/PRIMARY/' + fps_ +
-                    '?source=ARCHIVE'
-            }
-            var targetFilename = srtName(fps_ + "_TRANSLATION")
-            var sourceFilename = srtName(fps_ + "_SOURCE")
-            var backupFilename = srtName(fps_ + "_BILINGUAL_TABLE")
-                .replace(".srt",
-                    ".html")
-            var frms = 1000 / fps
-            async function getSourceColumnEvents() {
-                var result = await (await fetch(template_url))
-                    .json();
-                return result;
-            }
-            async function delayedDownload() {
-                var result = await getSourceColumnEvents();
-                //download(sourceFilename, array2srt(result))
-                download(backupFilename, arrays2html(result, src), "html")
-            }
-            delayedDownload()
-            //download(targetFilename,array2srt(src))
-            function srtName(suffix = "") {
-                var s = document.getElementsByClassName("cpe-page-menu-label")[0]
-                    .innerText
-                var srtName = (s.replace(/[ ]/g, '_')
-                        .replace(/[^a-z0-9_]/gi, '') +
-                        suffix + ".srt"
-                    ) //This gets rid of all punctuation, spaces and non-English letters
-                    .trim() //resulting in a name like 14545_El_Burrito_A_Breaking_Fat_Movie_FPS_2500.srt
-                if (!srtName) srtName = our_clq + "_" + suffix +
-                    ".srt" //Fallback measure. Useful for debugging later
-                return srtName
-            }
-
-            function frames2timecode(frames) { //frames to 00:01:02,000 format
-                var milliseconds = Math.round(frames * frms)
-                var srt_timecode = TimeConversion(milliseconds)
-                return srt_timecode
-            }
-
-            function merge_same(array) {
-                var merged = []
-                var skip_next = false
-                for (i = 0; i < array.length - 1; i++) {
-                    if (!skip_next) {
-                        thisEvent = array[i]
-                        nextEvent = array[i + 1]
-                        if (thisEvent[5] == nextEvent[5]) {
-                            skip_next = true
-                            thisEvent[2] = thisEvent[2] + "\n" + nextEvent[2]
-                            thisEvent[1] = nextEvent[1]
-                        }
-                        merged.push(thisEvent)
+                    var lsJson = localStorage["clq:origination:" + our_clq]
+                    if (!lsJson) {
+                        alert("Timed text events not found in Local Storage for CLQ: " +
+                            our_clq + "\nReport me to the developer.");
+                        throw new Error
+                    }
+                    var json_obj = JSON.parse(lsJson)
+                    var src = json_obj["events"]
+                    var fps_ = json_obj["meta"]["fps"]
+                    var fps = fps_.split("_")[1] / 100
+                    //From {"fps":"FPS_2500"}
+                    var proposed_fps = prompt("Press Enter to accept framerate of " + fps +
+                        " or enter new as 2400 or 2997:");
+                    if (proposed_fps !== "") {
+                        var int_fps = proposed_fps.substring(0, 2);
+                        var decimal_fps = proposed_fps.substring(2, proposed_fps.length);
+                        fps_ = "FPS" + "_" + int_fps + decimal_fps
+                        fps = (int_fps + "." + decimal_fps) * 1;
+                    }
+                    var mid = json_obj["meta"]["movieId"]
+                    var pid = json_obj["meta"]["packageId"]
+                    var which_url = prompt(
+                        "Press Enter to try the template. Enter anything to go for CC.")
+                    var which_lang = prompt(
+                        "DOUBLE EXPORT SRT reports…\n\nPress Enter to go for English. Enter a language code to try that (es/fr/ru/etc).",
+                        "en");
+                    if (which_lang == "") {
+                        which_lang = "en"
+                    }
+                    if (which_url == "") {
+                        var template_url =
+                            "https://timedtext.netflixstudios.com/nqapi/request/timedText/" +
+                            our_clq + '/' + pid + '/' + mid + '/' + which_lang + '/TEMPLATE/PRIMARY/' +
+                            fps_ + '?source=ORIGINATOR'
                     } else {
-                        skip_next = false
+                        var template_url =
+                            "https://timedtext.netflixstudios.com/nqapi/request/timedText/" +
+                            our_clq + '/' + pid + '/' + mid + '/' + which_lang + '/CC/PRIMARY/' + fps_ +
+                            '?source=ARCHIVE'
+                    }
+                    var targetFilename = srtName(fps_ + "_TRANSLATION")
+                    var sourceFilename = srtName(fps_ + "_SOURCE")
+                    var backupFilename = srtName(fps_ + "_BILINGUAL_TABLE")
+                        .replace(".srt",
+                            ".html")
+                    var frms = 1000 / fps
+                    async function getSourceColumnEvents() {
+                        var result = await (await fetch(template_url))
+                            .json();
+                        return result;
+                    }
+                    async function delayedDownload() {
+                        var result = await getSourceColumnEvents();
+                        //download(sourceFilename, array2srt(result))
+                        drawSuccessMark();
+                        download(backupFilename, arrays2html(result, src), "html")
+                    }
+                    delayedDownload()
+                    //download(targetFilename,array2srt(src))
+                    localStorage.removeItem("clq:origination:" + our_clq)
+                    console.log(
+                        "DEBUG: Flushing data from localStorage.")
+
+                    function srtName(suffix = "") {
+                        var s = document.getElementsByClassName("cpe-page-menu-label")[0]
+                            .innerText
+                        var srtName = (s.replace(/[ ]/g, '_')
+                                .replace(/[^a-z0-9_]/gi, '') +
+                                suffix + ".srt"
+                            ) //This gets rid of all punctuation, spaces and non-English letters
+                            .trim() //resulting in a name like 14545_El_Burrito_A_Breaking_Fat_Movie_FPS_2500.srt
+                        if (!srtName) srtName = our_clq + "_" + suffix +
+                            ".srt" //Fallback measure. Useful for debugging later
+                        return srtName
+                    }
+
+                    function frames2timecode(frames) { //frames to 00:01:02,000 format
+                        var milliseconds = Math.round(frames * frms)
+                        var srt_timecode = TimeConversion(milliseconds)
+                        return srt_timecode
+                    }
+
+                    function merge_same(array) {
+                        var merged = []
+                        var skip_next = false
+                        for (var i = 0; i < array.length - 1; i++) {
+                            if (!skip_next) {
+                                var thisEvent = array[i]
+                                var nextEvent = array[i + 1]
+                                if (thisEvent[5] == nextEvent[5]) {
+                                    skip_next = true
+                                    thisEvent[2] = thisEvent[2] + "\n" + nextEvent[2]
+                                    thisEvent[1] = nextEvent[1]
+                                }
+                                merged.push(thisEvent)
+                            } else {
+                                skip_next = false
+                            }
+                        }
+                        return merged
+                    }
+
+                    function arrays2html(events_object, events_object2) {
+                        var ordered_events = []
+                        var col = "SRC"
+                        for (var id in events_object) {
+                            events_object[id]["column"] = col
+                            try {
+                                var type_fn = events_object[id]["type"]
+                                if (type_fn === "fn") {
+                                    events_object[id]["txt"] += "<b></b>";
+                                    type_fn = undefined;
+                                }
+                            } catch (e) {}
+                            ordered_events.push([
+                                events_object[id]["start"], events_object[id]["end"],
+                                events_object[id]
+                                ["txt"],
+                                events_object[id]
+                                ["styles"],
+                                events_object[id]
+                                ["rgn"],
+                                events_object[id]
+                                ["column"],
+                            ])
+                        }
+                        var col = "TRG"
+                        for (var id in events_object2) {
+                            events_object2[id]["column"] = col
+                            ordered_events.push([
+                                events_object2[id]["start"], events_object2[id]["end"],
+                                events_object2[id]
+                                ["txt"],
+                                events_object2[id]
+                                ["styles"],
+                                events_object2[id]
+                                ["rgn"],
+                                events_object2[id]
+                                ["column"],
+                            ])
+                        }
+                        ordered_events.sort(function(a, b) {
+                            return a[0] - b[0];
+                        }); //Array sorted by in_cues, sequentially
+                        ordered_events = merge_same(ordered_events)
+                        //    ordered_events.sort(function (a
+                        //        , b) {
+                        //        return a[1] - b[1];
+                        //    }); //Array sorted by out_cues this time, because merge_same changes some, sequentially
+                        var index = 0
+                        var srt_txt = bilingualHtml;
+                        var eol = ""
+                        var source_content = ''
+                        for (event of ordered_events) {
+                            var start = frames2timecode(event[0])
+                            var end = frames2timecode(event[1])
+                            var startend = start + "\n" + end
+                            try {
+                                if (typeof event[3][0]["type"] !== "undefined") {
+                                    if (event[3][0]["type"] == "italic") {
+                                        content = italicize(content, event[3])
+                                    }
+                                }
+                            } catch (e) {}
+                            if (event[5] == "SRC") {
+                                source_content += event[2]
+                            } else {
+                                var tr = '<tr><td><pre>' + startend + '</pre></td><td><pre>' +
+                                    source_content + '</pre></td><td><pre>' + event[2] +
+                                    '</pre></td></tr>' + "\n";
+                                srt_txt += tr;
+                                tr = "";
+                                source_content = ""
+                            }
+                        }
+                        var titleinfo = document.getElementsByClassName(
+                                "cpe-page-menu-label")[0].innerText.replace(/ "/, " “")
+                            .replace(/"/, "”")
+                        var titlelink = document.location.href
+                        var titledate = new Date()
+                            .toISOString()
+                            .slice(0, 10)
+                        srt_txt = srt_txt.replace(/TITLEINFO/g, titleinfo)
+                            .replace(
+                                /TITLELINK/, titlelink)
+                            .replace(/TITLEDATE/g, titledate)
+                        return srt_txt
+                    }
+
+                    function array2srt(events_object) {
+                        var ordered_events = []
+                        for (var id in events_object) {
+                            try {
+                                var type_fn = events_object[id]["type"]
+                                if (type_fn === "fn") {
+                                    events_object[id]["txt"] += "<b></b>";
+                                    type_fn = undefined;
+                                }
+                            } catch (e) {}
+                            ordered_events.push([
+                                events_object[id]["start"], events_object[id]["end"],
+                                events_object[id]
+                                ["txt"],
+                                events_object[id]
+                                ["styles"],
+                                events_object[id]
+                                ["rgn"]
+                            ])
+                        }
+                        ordered_events.sort(function(a, b) {
+                            return a[0] - b[0];
+                        }); //Array sorted by in_cues, sequentially
+                        var index = 0
+                        var srt_txt = ''
+                        for (event of ordered_events) {
+                            index++
+                            var start = frames2timecode(event[0])
+                            var end = frames2timecode(event[1])
+                            var content = event[2]
+                            try {
+                                if (typeof event[3][0]["type"] !== "undefined") {
+                                    if (event[3][0]["type"] == "italic") {
+                                        content = italicize(content, event[3])
+                                    }
+                                }
+                            } catch (e) {}
+                            try {
+                                if (typeof event[4] !== "undefined") {
+                                    if (event[4] == "top") {
+                                        content = "{\\an8}" + content
+                                    }
+                                }
+                            } catch (e) {}
+                            try {
+                                if (event["type"] == "fn") {
+                                    content += '<b></b>'
+                                }
+                            } catch (e) {}
+                            console.log(content)
+                            var current_event = index + "\n" + start + " --> " + end + "\n" +
+                                content + "\n"
+                            srt_txt += current_event + "\n"
+                        }
+                        return srt_txt
+                    }
+
+                    function italicize(content, italics_array) {
+                        position_offset = 0
+                        for (var italic of italics_array) {
+                            var position_from = italic["from"] + position_offset;
+                            position_offset += 3
+                            content = [content.slice(0, position_from), "<i>", content.slice(
+                                position_from)].join('')
+                            var position_to = italic["to"] + position_offset;
+                            position_offset += 4
+                            content = [content.slice(0, position_to), "</i>", content.slice(
+                                position_to)].join('')
+                        }
+                        return content
+                    }
+
+                    function download(filename, text, type = "plain") {
+                        var element = document.createElement('a');
+                        element.setAttribute('href', 'data:text/' + type +
+                            ';charset=utf-8,%EF%BB%BF' + encodeURIComponent(text));
+                        element.setAttribute('download', filename);
+                        element.style.display = 'none';
+                        document.body.appendChild(element);
+                        element.click();
+                        document.body.removeChild(element);
+                    }
+
+                    function TimeConversion(duration) {
+                        let time = parseDuration(duration)
+                        return formatTimeHMSS(time)
+                    }
+
+                    function parseDuration(duration) {
+                        let remain = duration
+                        let hours = Math.floor(remain / (1000 * 60 * 60))
+                        remain = remain % (1000 * 60 * 60)
+                        let minutes = Math.floor(remain / (1000 * 60))
+                        remain = remain % (1000 * 60)
+                        let seconds = Math.floor(remain / (1000))
+                        remain = remain % (1000)
+                        let milliseconds = remain
+                        return {
+                            hours,
+                            minutes,
+                            seconds,
+                            milliseconds
+                        }
+                    }
+
+                    function formatTimeHMSS(o) {
+                        let hours = o.hours.toString()
+                        if (hours.length === 1) hours = '0' + hours
+                        let minutes = o.minutes.toString()
+                        if (minutes.length === 1) minutes = '0' + minutes
+                        let seconds = o.seconds.toString()
+                        if (seconds.length === 1) seconds = '0' + seconds
+                        let milliseconds = o.milliseconds.toString()
+                        if (milliseconds.length === 1) milliseconds = '00' + milliseconds
+                        if (milliseconds.length === 2) milliseconds = '0' + milliseconds
+                        return hours + ":" + minutes + ":" +
+                            //Example: 00:01:02,999 -- note that the SRT spec calls for a comma, not a period!
+                            seconds + "," + milliseconds
                     }
                 }
-                return merged
-            }
+                return runBilingual
+            })));
+            setEvents()
+            defer(runBilingual)
 
-            function arrays2html(events_object, events_object2) {
-                var ordered_events = []
-                var col = "SRC"
-                for (var id in events_object) {
-                    events_object[id]["column"] = col
-                    try {
-                        var type_fn = events_object[id]["type"]
-                        if (type_fn === "fn") {
-                            events_object[id]["txt"] += "<b></b>";
-                            type_fn = undefined;
-                        }
-                    } catch (e) {}
-                    ordered_events.push([
-                        events_object[id]["start"], events_object[id]["end"],
-                        events_object[id]
-                        ["txt"],
-                        events_object[id]
-                        ["styles"],
-                        events_object[id]
-                        ["rgn"],
-                        events_object[id]
-                        ["column"],
-                    ])
-                }
-                var col = "TRG"
-                for (var id in events_object2) {
-                    events_object2[id]["column"] = col
-                    ordered_events.push([
-                        events_object2[id]["start"], events_object2[id]["end"],
-                        events_object2[id]
-                        ["txt"],
-                        events_object2[id]
-                        ["styles"],
-                        events_object2[id]
-                        ["rgn"],
-                        events_object2[id]
-                        ["column"],
-                    ])
-                }
-                ordered_events.sort(function(a, b) {
-                    return a[0] - b[0];
-                }); //Array sorted by in_cues, sequentially
-                ordered_events = merge_same(ordered_events)
-                //    ordered_events.sort(function (a
-                //        , b) {
-                //        return a[1] - b[1];
-                //    }); //Array sorted by out_cues this time, because merge_same changes some, sequentially
-                var index = 0
-                var srt_txt = bilingualHtml;
-                var eol = ""
-                var source_content = ''
-                for (event of ordered_events) {
-                    var start = frames2timecode(event[0])
-                    var end = frames2timecode(event[1])
-                    var startend = start + "\n" + end
-                    try {
-                        if (typeof event[3][0]["type"] !== "undefined") {
-                            if (event[3][0]["type"] == "italic") {
-                                content = italicize(content, event[3])
-                            }
-                        }
-                    } catch (e) {}
-                    if (event[5] == "SRC") {
-                        source_content += event[2]
-                    } else {
-                        tr = '<tr><td><pre>' + startend + '</pre></td><td><pre>' +
-                            source_content + '</pre></td><td><pre>' + event[2] +
-                            '</pre></td></tr>' + "\n";
-                        srt_txt += tr;
-                        tr = "";
-                        source_content = ""
-                    }
-                }
-                var titleinfo = document.getElementsByClassName(
-                        "cpe-page-menu-label")[0].innerText.replace(/ "/, " “")
-                    .replace(/"/, "”")
-                var titlelink = document.location.href
-                var titledate = new Date()
-                    .toISOString()
-                    .slice(0, 10)
-                srt_txt = srt_txt.replace(/TITLEINFO/g, titleinfo)
-                    .replace(
-                        /TITLELINK/, titlelink)
-                    .replace(/TITLEDATE/g, titledate)
-                return srt_txt
-            }
-
-            function array2srt(events_object) {
-                var ordered_events = []
-                for (var id in events_object) {
-                    try {
-                        var type_fn = events_object[id]["type"]
-                        if (type_fn === "fn") {
-                            events_object[id]["txt"] += "<b></b>";
-                            type_fn = undefined;
-                        }
-                    } catch (e) {}
-                    ordered_events.push([
-                        events_object[id]["start"], events_object[id]["end"],
-                        events_object[id]
-                        ["txt"],
-                        events_object[id]
-                        ["styles"],
-                        events_object[id]
-                        ["rgn"]
-                    ])
-                }
-                ordered_events.sort(function(a, b) {
-                    return a[0] - b[0];
-                }); //Array sorted by in_cues, sequentially
-                var index = 0
-                var srt_txt = ''
-                for (event of ordered_events) {
-                    index++
-                    var start = frames2timecode(event[0])
-                    var end = frames2timecode(event[1])
-                    var content = event[2]
-                    try {
-                        if (typeof event[3][0]["type"] !== "undefined") {
-                            if (event[3][0]["type"] == "italic") {
-                                content = italicize(content, event[3])
-                            }
-                        }
-                    } catch (e) {}
-                    try {
-                        if (typeof event[4] !== "undefined") {
-                            if (event[4] == "top") {
-                                content = "{\\an8}" + content
-                            }
-                        }
-                    } catch (e) {}
-                    try {
-                        if (event["type"] == "fn") {
-                            content += '<b></b>'
-                        }
-                    } catch (e) {}
-                    console.log(content)
-                    var current_event = index + "\n" + start + " --> " + end + "\n" +
-                        content + "\n"
-                    srt_txt += current_event + "\n"
-                }
-                return srt_txt
-            }
-
-            function italicize(content, italics_array) {
-                position_offset = 0
-                for (var italic of italics_array) {
-                    var position_from = italic["from"] + position_offset;
-                    position_offset += 3
-                    content = [content.slice(0, position_from), "<i>", content.slice(
-                        position_from)].join('')
-                    var position_to = italic["to"] + position_offset;
-                    position_offset += 4
-                    content = [content.slice(0, position_to), "</i>", content.slice(
-                        position_to)].join('')
-                }
-                return content
-            }
-
-            function download(filename, text, type = "plain") {
-                var element = document.createElement('a');
-                element.setAttribute('href', 'data:text/' + type +
-                    ';charset=utf-8,%EF%BB%BF' + encodeURIComponent(text));
-                element.setAttribute('download', filename);
-                element.style.display = 'none';
-                document.body.appendChild(element);
-                element.click();
-                document.body.removeChild(element);
-            }
-
-            function TimeConversion(duration) {
-                let time = parseDuration(duration)
-                return formatTimeHMSS(time)
-            }
-
-            function parseDuration(duration) {
-                let remain = duration
-                let hours = Math.floor(remain / (1000 * 60 * 60))
-                remain = remain % (1000 * 60 * 60)
-                let minutes = Math.floor(remain / (1000 * 60))
-                remain = remain % (1000 * 60)
-                let seconds = Math.floor(remain / (1000))
-                remain = remain % (1000)
-                let milliseconds = remain
-                return {
-                    hours,
-                    minutes,
-                    seconds,
-                    milliseconds
-                }
-            }
-
-            function formatTimeHMSS(o) {
-                let hours = o.hours.toString()
-                if (hours.length === 1) hours = '0' + hours
-                let minutes = o.minutes.toString()
-                if (minutes.length === 1) minutes = '0' + minutes
-                let seconds = o.seconds.toString()
-                if (seconds.length === 1) seconds = '0' + seconds
-                let milliseconds = o.milliseconds.toString()
-                if (milliseconds.length === 1) milliseconds = '00' + milliseconds
-                if (milliseconds.length === 2) milliseconds = '0' + milliseconds
-                return hours + ":" + minutes + ":" +
-                    //Example: 00:01:02,999 -- note that the SRT spec calls for a comma, not a period!
-                    seconds + "," + milliseconds
-            }
         })();
     }
 
     function imarunettuImportBetterSrt() {
         (function() {
             document.querySelectorAll(
-                    "#appView > div > div.cpe-page-menu > div > div.actions > button:nth-child(2)")[0]
+                    "#Hawkins-Button-5")[0]
                 .click();
             var fps_ = document.querySelectorAll(".info-body")[0].children[9].innerText.replace(
                     /[^_0-9]{5}/g, '')
                 .trim()
-            document.querySelectorAll("#appView > div > div.InfoPopup > dialog > div.info-body")[0]
+            document.querySelectorAll("#appView > div > div.origination-editor > div.InfoPopup > dialog > div.info-body")[0]
                 .nextSibling.lastElementChild.click()
             window.open('https://katzurki.github.io/nettufurikusu/ImportBetterSRT.html#' + fps_)
         })()
@@ -3186,14 +3651,18 @@ document.onkeydown = function(event){
             var span = document.createElement("span")
             span.className = "label"
             var taskBeenSaved = document.getElementsByClassName("bh-check_circle")[0] ? true : false;
-            if (btnid == "imarunettuRunAutoQC") {
-                btntext = btntext + " for " + window.imarunettuLang
+            if (btnid == "imarunettuKNP2CSV" && window.imarunettuLang !== "EN") {
+                btntext = btntext.replace("KNP","KNP" + " for " + window.imarunettuLang).replace("ZH-HANS","CN") //
             }
+            if (btnid == "imarunettuRunAutoQC") {
+                btntext = btntext + " for " + window.imarunettuLang.replace("ZH-HANS","CN")
+            }
+
             if (btnid == "imarunettuRunAutoQC" || btnid == "imarunettuDoubleExportSRT" || btnid ==
                 "imarunettuBilingualExportHTML") {
                 if (!taskBeenSaved) {
-                    button.classList.add("disabled");
-                    button.setAttribute("disabled", "");
+                //    button.classList.add("disabled");
+                //    button.setAttribute("disabled", "");
                 } else {
                     button.classList.remove("disabled");
                     button.removeAttribute("disabled");
@@ -3201,21 +3670,24 @@ document.onkeydown = function(event){
             }
             span.innerText = btntext
             button.onclick = function(event) {
-                switch(btnid){
+                switch (btnid) {
                     case "imarunettuCleanup":
-                    event.stopImmediatePropagation();
-                    imarunettuCleanup();
+                        event.stopImmediatePropagation();
+                        imarunettuCleanup();
                         break;
                     case "imarunettuBilingualExportHTML":
+                        createLoadingSvg();
                         imarunettuBilingualExportHTML();
                         break;
-                    case "imarunettuExportMP4": 
+                    case "imarunettuExportMP4":
                         imarunettuExportMP4();
                         break;
                     case "imarunettuDoubleExportSRT":
+                        createLoadingSvg();
                         imarunettuDoubleExportSRT();
                         break;
                     case "imarunettuKNP2CSV":
+                        createLoadingSvg();
                         imarunettuKNP2CSV();
                         break;
                     case "imarunettuExportSettings":
@@ -3225,14 +3697,16 @@ document.onkeydown = function(event){
                         imarunettuImportBetterSrt();
                         break;
                     case "imarunettuRemoveClutter":
-                        imarunettuRemoveClutter(); 
+                        imarunettuRemoveClutter();
                         break;
                     case "imarunettuRunAutoQC":
+                        createLoadingSvg();
                         imarunettuRunAutoQC();
                         break;
-                    default:;
+                    default:
+                        ;
                 }
-                }
+            }
             button.append(span)
             menu.append(button)
         }
@@ -3249,7 +3723,9 @@ document.onkeydown = function(event){
         }
         return window.imarunettuLang
     }
-} else { alert("The imaru•nettu script works in Originator or Lucid only.") }
+} else {
+    alert("The imaru•nettu script works in Originator or Lucid only.")
+}
 
 function imarunettuKNP2CSV() {
     (function() {
@@ -3260,22 +3736,20 @@ function imarunettuKNP2CSV() {
             '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
             'i'); //CLQ is a guid v4
         var lang_prompt =
-            "Enter a 2-char language code, like ru or fr:\n(exception: zh-CN, zh-TW, pt-BR, pt-PT)"
+            "Enter a language code (for Chinese, use either zh-Hans or zh-Hant):"
         var getAllLanguages = false
         var oKnp = {}
-        var majorEntities = ["PERSON", "LOCATION", "ORGANIZATION",
-            "PHRASE"
-        ] //types of KNP entries, at least one is always present
         var finalCsvArray = []
         var currentCsvRow = []
-        var universalBOM = "\uFEFF";;
+        var universalBOM = "\uFEFF";
+        var mid = getMovieIDFromOriginator();
 
-        if (!clq || !clq_pattern.test(clq)) {
-            throw new Error(alert("Something went wrong. CLQ for debug: " + clq))
+        if (!clq || !clq_pattern.test(clq) || !mid) {
+            throw new Error(alert("Something went wrong. CLQ for debug: " + clq + "/" + mid))
         }
-        if (host == "originator.backlot.netflix.com") { //We can run both from Lucid and from Backlot
+        if (host == "timedtext.netflixstudios.com") { //We can run both from Lucid and from Backlot
             var knpJsonLink =
-                "https://originator.backlot.netflix.com/api/knp/clq:origination:" + clq
+                "https://timedtext.netflixstudios.com/nqapi/knp/clq:origination:" + clq + "/" + mid
             var taskTitle = document.getElementsByClassName("cpe-page-menu-label")[0]
                 .innerText
             var LANG = taskTitle.split(",")
@@ -3288,7 +3762,7 @@ function imarunettuKNP2CSV() {
             var taskTitle = document.querySelector("div.movie-title")
                 .innerText.replace("Movie: ", "")
             var LANG = prompt(
-                lang_prompt, "zh-CN"
+                lang_prompt, "zh-Hans"
             ) //but in Lucid, we can't guess what target language the user wants
         } else {
             throw new Error(alert(
@@ -3296,14 +3770,15 @@ function imarunettuKNP2CSV() {
             ))
         }
 
-        if (LANG == "zh-Hans") LANG = "zh-CN" //special case
+        if (LANG == "zh-CN" || LANG == "cn" || LANG == "CN") LANG = "zh-Hans" //special case
         if (LANG == "en") {
             do {
                 LANG = prompt("Target language cannot be \"en\".\n" + lang_prompt);
             } while (LANG == "en")
         }
         if (LANG == "") {
-            throw new Error(alert("You must enter a language code."))}
+            throw new Error(alert("You must enter a language code."))
+        }
 
         var getJSON = async url => {
             try {
@@ -3330,15 +3805,16 @@ function imarunettuKNP2CSV() {
             if (!csvName) csvName = "KNP_" + clq + "_" + suffix + ".csv"
             return csvName
         } //resulting in a name like KNP_18383223_El_Burrito_A_Breaking_Fat_Movie_ru.csv
+
         function getMovieIDFromOriginator() { //in Originator, movieId can be obtained from the info page, but it isn't loaded until clicked
             document.querySelectorAll(
-                "#appView > div > div.cpe-page-menu > div > div.actions > button:nth-child(2)"
+                "#Hawkins-Button-5"
             )[0].click();
             movieid = document.querySelectorAll(".info-body")[0].children[2].innerText
                 .replace(/[^0-9]/g, '')
                 .trim()
             document.querySelectorAll(
-                    "#appView > div > div.InfoPopup > dialog > div.info-body")[0].nextSibling
+                    "#appView > div > div.origination-editor > div.InfoPopup > dialog > div.info-body")[0].nextSibling
                 .lastElementChild.click() //don't forget to close the popup!
             return movieid
         }
@@ -3362,9 +3838,58 @@ function imarunettuKNP2CSV() {
                 )
                 .join('\r\n');
         }
-        getJSON(knpJsonLink)
-            .then(data => {
-                oKnp = data
+        fetch("https://timedtext.netflixstudios.com/graphql", {
+
+
+        method: "POST",
+        headers: {
+            "Host": "timedtext.netflixstudios.com",
+            "accept": "*/*",
+            "content-type": "application/json",
+            "Origin": "https://timedtext.netflixstudios.com",
+            "Accept-Encoding": "gzip, deflate"
+        },
+        credentials: "same-origin",
+        body: JSON.stringify({
+        operationName: "GetTermsForMovies",
+        variables: {
+        movieId: mid,
+        filter: {},
+        authzContext: {
+        app: "originator",
+        taskId: "clq:origination:" + clq
+        }
+    },
+        query: `query GetTermsForMovies($movieId: Int!, $filter: G11NTermFilterInput, $authzContext: G11NTermAuthzInput) {
+    g11n_termsForMovies(
+    movieIds: [$movieId]
+    lookupType: SELF_AND_DESCENDENTS
+    filter: $filter
+    authzContext: $authzContext
+  ) {
+    id
+    type
+    text
+    currentVersion
+    createdAt
+    translations {
+      text
+      language
+      __typename
+    }
+    __typename
+  }
+}`
+})
+})
+.then(response => response.json())
+.then(data => {
+                oKnp = data.data.g11n_termsForMovies
+                var srcLocale = JSON.parse(oKnp[0].id).languageCode
+                if (typeof srcLocale.error !== "undefined") {
+                    alert(srcLocale.error.message + "\nNo source locale detected. Trying to continue with srcLocale set to EN.")
+                    srcLocale = "en";
+                }
                 if (typeof oKnp.error !== "undefined") {
                     alert(oKnp.error.message +
                         "\nTry exporting from the Lucid KNP page.\nIf the KNP opens but doesn't export, report me to the developer."
@@ -3374,72 +3899,44 @@ function imarunettuKNP2CSV() {
                         "https://localization-lucid.netflix.com/knp/view/" + movieid +
                         "?appName=originator&requestReference=clq:origination:" + clq
                 }
-                if (oKnp.srcLocale == "en") {
-                    var header = ["TYPE", "TEMPLATE (EN)", "NOTE", "TARGET (" + LANG
-                        .toUpperCase() + ")", "NOTE (" + LANG.toUpperCase() + ")"
-                    ]
-                    finalCsvArray.push(header)
-                    for (const Entity of majorEntities) {
-                        if (typeof oKnp.mapKnpTermDTOs[Entity] !== "undefined") {
-                            oKnp.mapKnpTermDTOs[Entity].forEach((v) => {
-                                try {
-                                    currentCsvRow.push(v.type, denull(v.srcValue.value),
-                                        denull(
-                                            v.srcValue.note), denull(v.localizedValues[
-                                                LANG]
-                                            .value), denull(v.localizedValues[LANG].note))
-                                    finalCsvArray.push(currentCsvRow);
-                                    currentCsvRow = [];
-                                } catch (e) {
-                                    console.log(e)
-                                }
-                            })
+
+                function getTermByLanguage(translations, lang = LANG) {
+                    for (translation of translations) {
+                        if (translation.language === lang) {
+                            return translation.text
                         }
                     }
-                    oKnp.titleDTOs.forEach((t) => {
-                        try {
-                            currentCsvRow.push(t.type, t.srcValue.value, t.srcValue.note, t
-                                .localizedValues[LANG].value, t.localizedValues[LANG].note
-                            )
-                            finalCsvArray.push(currentCsvRow);
-                            currentCsvRow = [];
-                        } catch (e) {}
-                    })
-                } else {
-                    var LANG_SRC = oKnp.srcLocale
-                    var header = ["TYPE", "SOURCE (" + LANG_SRC.toUpperCase() + ")",
-                        "TEMPLATE (EN)", "NOTE (EN)", "TARGET (" + LANG.toUpperCase() +
-                        ")", "NOTE (" + LANG.toUpperCase() + ")"
-                    ]
-                    finalCsvArray.push(header)
-                    for (const Entity of majorEntities) {
-                        if (typeof oKnp.mapKnpTermDTOs[Entity] !== "undefined") {
-                            oKnp.mapKnpTermDTOs[Entity].forEach((v) => {
-                                try {
-                                    currentCsvRow.push(v.type, denull(v.srcValue.value),
-                                        denull(
-                                            v.localizedValues["en"].value), denull(v
-                                            .localizedValues["en"].note), denull(v
-                                            .localizedValues[LANG].value), denull(v
-                                            .localizedValues[LANG].note))
-                                    finalCsvArray.push(currentCsvRow);
-                                    currentCsvRow = [];
-                                } catch (e) {}
-                            })
-                        }
-                    }
-                    for (g = 0; g < oKnp.titleDTOs.length - 1; g++) {
-                        try {
-                            currentCsvRow.push(oKnp.titleDTOs[g].type, denull(oKnp.titleDTOs[g]
-                                    .srcValue.value), denull(oKnp.titleDTOs[g].localizedValues[
-                                    "en"].value), denull(oKnp.titleDTOs[g].localizedValues["en"]
-                                    .note), denull(oKnp.titleDTOs[g].localizedValues[LANG].value),
-                                denull(oKnp.titleDTOs[g].localizedValues[LANG].note))
-                            finalCsvArray.push(currentCsvRow);
-                            currentCsvRow = [];
-                        } catch (e) {}
-                    }
+                    return ""
                 }
+
+                function doSort(ascending) {
+                var ascending = typeof ascending == 'undefined' || ascending == true;
+                    return function(a, b) {
+                var ret = a[0].localeCompare(b[0]) || a[1] - b[1];
+                return ascending ? ret : -ret;
+                };
+                }
+
+                if (srcLocale == "en") {
+                    var header = ["TYPE", "SOURCE (EN)", "TARGET (" + LANG.toUpperCase() + ")"]
+                    for (const term of oKnp) {
+                        currentCsvRow.push(term.type, term.text, getTermByLanguage(term.translations, LANG))
+                        finalCsvArray.push(currentCsvRow);
+                        currentCsvRow = [];
+                    }
+                    finalCsvArray.sort(doSort(true));
+                    finalCsvArray.unshift(header);
+                } else {  //we make EN translation the "source," but also include the original for reference as a separate column --for non-EN-audio tasks
+                    var header = ["TYPE", "SOURCE (EN)", "TARGET (" + LANG.toUpperCase() + ")", "ORIGINAL (" + srcLocale.toUpperCase() + ")"]
+                    for (const term of oKnp) {
+                        currentCsvRow.push(term.type, getTermByLanguage(term.translations, "en"), getTermByLanguage(term.translations, LANG), term.text)
+                        finalCsvArray.push(currentCsvRow);
+                        currentCsvRow = [];
+                    }
+                    finalCsvArray.sort(doSort(true));
+                    finalCsvArray.unshift(header);
+                }
+
                 let csv = arrayToCsv(finalCsvArray)
                 var a = window.document.createElement('a');
                 a.setAttribute('href', 'data:text/csv; charset=utf-8,' +
@@ -3448,6 +3945,7 @@ function imarunettuKNP2CSV() {
                 window.document.body.appendChild(a);
                 a.click();
                 a.remove();
+                drawSuccessMark();
                 console.log("File " + csvName + " with " + finalCsvArray.length +
                     " rows successfully downloaded!\nThis page must be reloaded to avoid namespace conflicts."
                 );
